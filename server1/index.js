@@ -33,11 +33,11 @@ const typeDefs = `#graphql
 const resolvers = {
   UUID: UUIDResolver,
   Query: {
-    user: (_, { id }, { req }) => {
+    user: (_, { id }) => {
       // req доступен здесь
       return usersData.find(user => user.id === id) || null;
     },
-    users: (_, __, { req }) => {
+    users: () => {
       // req доступен здесь
       return usersData;
     },
@@ -53,11 +53,6 @@ const port = parseInt(process.env.PORT || '4000', 10);
 
 startStandaloneServer(server, {
   listen: { port },
-  context: async ({ req, res }) => {
-    console.log('--- headers', req.headers);
-
-    return { req, res };
-  },
 }).then(({ url }) => {
   console.log(`Server ready at ${url}`);
 });

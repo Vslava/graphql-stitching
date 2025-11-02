@@ -6,8 +6,15 @@ const { print } = require('graphql');
 const fetch = require('cross-fetch');
 
 function getRequestHeaders(context, requestHeaderNames) {
+  if (!context?.request?.headers) {
+    return {};
+  }
+
   return requestHeaderNames.reduce((acc, headerName) => {
-    acc[headerName] = context.request.headers.get(headerName);
+    const headerValue = context.request.headers.get(headerName);
+    if (headerValue) {
+      acc[headerName] = headerValue;
+    }
     return acc;
   }, {});
 }
